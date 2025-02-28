@@ -1,4 +1,3 @@
-
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 import csv
@@ -20,8 +19,8 @@ if not os.path.exists(CSV_FILE):
 
 def menu():
 
-    menu = """Here’s our menu:\n1. Fried Rice with chicken - #4500\n2. Jollof rice with beef - #3000\n3. Spaghetti - #2500\n4. Sharwama - #2500
-5. Meat pie - #1000\n\nReply with the item number to order."""
+    menu = """Here’s our menu:\n1.Family size pizza - #8500\n2. Meat pie - #1000\n3. Smoothie - #1000\n4. Sharwama - #2500\n5. Bagels - #1500\n6. Ice cream - #2000
+7. Chicken - #3000\n\nReply with the item number to order."""
     return menu
 
 
@@ -35,7 +34,7 @@ def bot():
     # Initialize conversation
     if sender not in customer_data:
         customer_data[sender] = {"state": "welcome"}
-        msg.body("""Welcome to Goodness' Delight! We are here to serve you delicious meals. I am a chatbot here to make your order smooth and seamless.
+        msg.body("""Welcome to Your Cravings! We are here to serve you delicious meals. I am a chatbot here to make your order smooth and seamless.
         Choose the most suitable of the following options:.\n\nChoose an option:\n1. Place an order\n2. Contact an agent\n3. About us  \n\nType the corresponding number.""")
         return str(response)
 
@@ -52,13 +51,13 @@ def bot():
         elif incoming_msg == "2":
             msg.body("You can contact our agent at +08133814443. Let us know if you need anything else!")
         elif incoming_msg == "3":
-            msg.body("We are Foodie's Delight, committed to serving the best meals. Established in 2020, we pride ourselves on fresh ingredients and quick service!")
+            msg.body("We are Your Cravings, committed to serving the best meals. Established in 2020, we pride ourselves on fresh ingredients and quick service!")
         else:
             msg.body("Invalid option. Please choose:\n1. Place an order\n2. Contact an agent\n3. About us")
 
     elif state == "menu":
         if incoming_msg in ["1", "2", "3",'4','5']:
-            item = {"1": "Fried Rice with chicken", "2": "Jollof rice with beef", "3": "Spaghetti", "4": "Sharwama", "5": "Meat pie"}[incoming_msg]
+            item = {"1": "Family size pizza", "2": "Meat pie", "3": "Smoothie", "4": "Sharwama", "5": "Bagels", "6": "Ice cream", "7": "Chicken}[incoming_msg]
             customer_data[sender]["order"] = {"item": item, "quantity": 0}
             customer_data[sender]["state"] = "quantity"
             msg.body(f"You selected {item}. How many would you like to order?")
@@ -87,10 +86,10 @@ def bot():
         if incoming_msg == "menu":
             customer_data[sender]["state"] = "menu"
             msg.body(menu())
-            # msg.body("Here’s our menu:\n1. Burger - $5\n2. Pizza - $8\n3. Pasta - $7\n\nReply with the item number to order.")
+
         elif incoming_msg == "exit":
             del customer_data[sender]
-            msg.body("Thank you for choosing Foodie's Delight. Have a great day!")
+            msg.body("Thank you for choosing Your Cravingst. Have a great day!")
         else:
             msg.body("Reply 'menu' to start a new order or 'exit' to end.")
 
@@ -117,5 +116,4 @@ def save_to_csv(sender, data):
 
 if __name__ == "__main__":
     app.run(port=5000)
-
 
